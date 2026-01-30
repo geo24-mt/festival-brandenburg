@@ -1,0 +1,101 @@
+/* 8. KALENDER */
+#calendar-container {
+	background: transparent;
+	color: white;
+	font-family: 'Montserrat', sans-serif;
+
+}
+#calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1px 1px;
+}
+#calendar-header h2 {
+    font-size: 14px !important; 
+    text-transform: none !important; 
+    font-variant: normal !important;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+#calendar-header button {
+    background: transparent;
+    border: transparent;
+    color: #e0e0e0;
+    border-radius: 7px;
+    cursor: pointer;
+    padding: 5px 5px;
+ 	transition: all 0.3s ease;
+}
+#calendar-header button:hover {
+    background: rgba(79, 209, 197, 0.5);
+    border-color: transparent;
+
+}
+#calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    padding-bottom: 13px;
+	padding-top: 5px;
+}
+.day-name {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    color: #4fd1c5 !important;
+	padding-bottom: 4px;
+}
+.calendar-day {
+    aspect-ratio: 1 / 1; 
+    display: flex; 
+    align-items: center;     
+    justify-content: center; 
+    padding: 0 !important;   
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    transition: 0.2s;
+}
+.calendar-day:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+.calendar-day.selected {
+    background: rgba(79, 209, 197, 0.8) !important;
+    color: #1e1e1e !important;  
+    font-weight: bold;
+    box-shadow: 0 0 12px rgba(0, 242, 255, 0.5); 
+}
+.calendar-day.in-range {
+    background: rgba(0, 242, 255, 0.15) !important;
+    color: #4fd1c5 !important;
+    border-radius: 0;
+}
+
+.calendar-day.today {
+    position: relative;
+    color: #4fd1c5;
+    font-weight: bold;
+    background: transparent !important;
+}
+
+.calendar-day.today::after {
+    content: ''; 
+    position: absolute;
+    top: -1.5px;
+    left: -3px;
+    right: -3px;
+    bottom: -1.5px;
+    border: 1.5px solid #4fd1c5;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(79, 209, 197, 0.6);
+    pointer-events: none; 
+}
