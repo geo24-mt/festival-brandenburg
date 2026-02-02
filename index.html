@@ -627,7 +627,7 @@ html, body {
         var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             pane: 'pane_GoogleMaps_0',
             opacity: 1.0,
-            attribution: '@googlemaps',
+            attribution: '© Google Maps',
             minZoom: 3,
             maxZoom: 28,
             minNativeZoom: 0,
@@ -698,14 +698,13 @@ function pop_festival_2(feature, layer) {
             className: 'my-tooltip'
         });
     }
-
     var fName = feature.properties['Festival_N'] ? feature.properties['Festival_N'].toString().trim() : 'Unbekanntes Festival';
     var zielUrl = festivalLinks[fName]; 
     if (!zielUrl || zielUrl === "") {
         zielUrl = "https://www.google.com/search?q=" + encodeURIComponent(fName + " Festival Brandenburg");
     }
 
-    var popupContent = '<div style="text-align: center; font-weight: bold; font-size: 17px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">' + 
+     var popupContent = '<div style="text-align: center; font-weight: bold; font-size: 17px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">' + 
                         '<a href="' + zielUrl + '" target="_blank" rel="noopener noreferrer" style="color: #8e44ad; text-decoration: none;">' + 
                            fName + '<span style="font-size: 18px; margin-left: 8px;">&#10150;</span>' +
                         '</a>' +
@@ -722,7 +721,7 @@ function pop_festival_2(feature, layer) {
                         <tr><th scope="row">PLZ</th><td>' + (feature.properties['PLZ'] || '') + '</td></tr>\
                         <tr><th scope="row">Ort</th><td>' + (feature.properties['Ort'] || '') + '</td></tr>\
                         <tr><th scope="row">Landkreis</th><td>' + (feature.properties['gen'] || '') + '</td></tr>\
-                                       </table>';
+                    </table>';
     layer.bindPopup(popupContent, {
         minWidth: 350,
         maxWidth: 800,
@@ -730,7 +729,7 @@ function pop_festival_2(feature, layer) {
     });
 }
 
-       map.createPane('pane_festival_2');
+map.createPane('pane_festival_2');
 map.getPane('pane_festival_2').style.zIndex = 402;
 /* meine ICONS einbauen */
 function getFestivalIcon(kategorie) {
