@@ -627,7 +627,7 @@ html, body {
         var layer_GoogleMaps_0 = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
             pane: 'pane_GoogleMaps_0',
             opacity: 1.0,
-            attribution: '',
+            attribution: '@googlemaps',
             minZoom: 3,
             maxZoom: 28,
             minNativeZoom: 0,
@@ -636,8 +636,7 @@ html, body {
         layer_GoogleMaps_0;
         map.addLayer(layer_GoogleMaps_0);
 		
-		
-        function pop_landkreis_1(feature, layer) {
+function pop_landkreis_1(feature, layer) {
     if (feature.properties['gen'] !== null) {
         layer.bindTooltip(String(feature.properties['gen']), {
             sticky: true,
@@ -701,7 +700,7 @@ function pop_festival_2(feature, layer) {
     }
 
     var fName = feature.properties['Festival_N'] ? feature.properties['Festival_N'].toString().trim() : 'Unbekanntes Festival';
-    var zielUrl = festivalLinks[fName]; // Hier nutzt du festivalLinks
+    var zielUrl = festivalLinks[fName]; 
     if (!zielUrl || zielUrl === "") {
         zielUrl = "https://www.google.com/search?q=" + encodeURIComponent(fName + " Festival Brandenburg");
     }
@@ -723,13 +722,13 @@ function pop_festival_2(feature, layer) {
                         <tr><th scope="row">PLZ</th><td>' + (feature.properties['PLZ'] || '') + '</td></tr>\
                         <tr><th scope="row">Ort</th><td>' + (feature.properties['Ort'] || '') + '</td></tr>\
                         <tr><th scope="row">Landkreis</th><td>' + (feature.properties['gen'] || '') + '</td></tr>\
-                       </table>';
-            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
-			layer.on('popupopen', function(e) {
-				addClassToPopupIfMedia(content, e.popup);
-			});
-			layer.bindPopup(content, { maxHeight: 400 });
-        }
+                                       </table>';
+    layer.bindPopup(popupContent, {
+        minWidth: 350,
+        maxWidth: 800,
+        autoPan: true
+    });
+}
 
        map.createPane('pane_festival_2');
 map.getPane('pane_festival_2').style.zIndex = 402;
