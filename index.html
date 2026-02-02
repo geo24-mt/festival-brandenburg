@@ -653,7 +653,7 @@ function pop_landkreis_1(feature, layer) {
             return {
                 pane: 'pane_landkreis_1',
                 opacity: 1,
-                color: 'rgba(151,151,151,1.0)',
+                color: 'rgba(120,120,120,1.0)',
                 weight: 1.0, 
                 fill: true,
                 fillOpacity: 1,
@@ -675,7 +675,52 @@ function pop_landkreis_1(feature, layer) {
         });
         bounds_group.addLayer(layer_landkreis_1);
         map.addLayer(layer_landkreis_1);
-		
+			/**************/
+	/* meine ICONS einbauen */
+function getFestivalIcon(kategorie) {
+    var fileName;
+    var kat = String(kategorie).toLowerCase().replace(/\s/g, '');
+    if (kat.includes('indie') && kat.includes('electro')) {
+        fileName = 'Indie-Electro_symbol.png';
+    } else if (kat.includes('fantasy') || kat.includes('pop')) {
+        fileName = 'Fantasy-Pop_symbol.png';
+    } else if (kat.includes('electro')) {
+        fileName = 'Electro_symbol.png';
+    } else if (kat.includes('metal')) {
+        fileName = 'Metal_symbol.png';
+    } else if (kat.includes('rock')) {
+        fileName = 'Rock_symbol.png';
+    } else {
+        fileName = 'background.png'; 
+    }
+    return 'Symbole/' + fileName;
+}
+
+// Der Layer-Aufruf
+var layer_festival_2 = new L.geoJson(json_festival_2, {
+    interactive: true,
+    pane: 'pane_festival_2',
+    onEachFeature: pop_festival_2,
+    pointToLayer: function (feature, latlng) {
+        var kat = String(feature.properties['Kategorie']); 
+        
+        var isMobile = window.innerWidth <= 768;
+        var size = isMobile ? 28 : 44; 
+        var anchor = size / 2; 
+        var festivalIcon = L.icon({
+            iconUrl: getFestivalIcon(kat),
+            iconSize: [size, size],
+            iconAnchor: [anchor, anchor],
+            popupAnchor: [0, -anchor] 
+        });
+
+        return L.marker(latlng, {
+            icon: festivalIcon,
+            pane: 'pane_festival_2',
+            interactive: true
+        });
+    }
+});	
 		
 function pop_festival_2(feature, layer) {
     layer.on('click', function(e) {
@@ -731,51 +776,7 @@ function pop_festival_2(feature, layer) {
 
 map.createPane('pane_festival_2');
 map.getPane('pane_festival_2').style.zIndex = 402;
-/* meine ICONS einbauen */
-function getFestivalIcon(kategorie) {
-    var fileName;
-    var kat = String(kategorie).toLowerCase().replace(/\s/g, '');
-    if (kat.includes('indie') && kat.includes('electro')) {
-        fileName = 'Indie-Electro_symbol.png';
-    } else if (kat.includes('fantasy') || kat.includes('pop')) {
-        fileName = 'Fantasy-Pop_symbol.png';
-    } else if (kat.includes('electro')) {
-        fileName = 'Electro_symbol.png';
-    } else if (kat.includes('metal')) {
-        fileName = 'Metal_symbol.png';
-    } else if (kat.includes('rock')) {
-        fileName = 'Rock_symbol.png';
-    } else {
-        fileName = 'background.png'; 
-    }
-    return 'Symbole/' + fileName;
-}
 
-// Der Layer-Aufruf
-var layer_festival_2 = new L.geoJson(json_festival_2, {
-    interactive: true,
-    pane: 'pane_festival_2',
-    onEachFeature: pop_festival_2,
-    pointToLayer: function (feature, latlng) {
-        var kat = String(feature.properties['Kategorie']); 
-        
-        var isMobile = window.innerWidth <= 768;
-        var size = isMobile ? 28 : 44; 
-        var anchor = size / 2; 
-        var festivalIcon = L.icon({
-            iconUrl: getFestivalIcon(kat),
-            iconSize: [size, size],
-            iconAnchor: [anchor, anchor],
-            popupAnchor: [0, -anchor] 
-        });
-
-        return L.marker(latlng, {
-            icon: festivalIcon,
-            pane: 'pane_festival_2',
-            interactive: true
-        });
-    }
-});
         bounds_group.addLayer(layer_festival_2);
         map.addLayer(layer_festival_2);
         const url = {"Nominatim OSM": "https://nominatim.openstreetmap.org/search?format=geojson&addressdetails=1&",
