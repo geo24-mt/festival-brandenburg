@@ -723,33 +723,23 @@ var layer_festival_2 = new L.geoJson(json_festival_2, {
 });	
 		
 function pop_festival_2(feature, layer) {
-    layer.on('click', function(e) {
-        var routingContainer = document.querySelector('.leaflet-routing-container');
-        var istRoutingAktiv = routingContainer && !routingContainer.classList.contains('leaflet-routing-container-hide');
-        if (istRoutingAktiv) {
-            L.DomEvent.stopPropagation(e); 
-            if (typeof control !== 'undefined') {
-                var waypoints = control.getPlan().getWaypoints();
-                control.spliceWaypoints(waypoints.length - 1, 1, e.latlng);
-            }
-            layer.closePopup();
-        } else {
-            layer.openPopup();
-        }
-    });
+    // 1. Tooltip (Hover-Name)
     if (feature.properties['Festival_N']) {
         layer.bindTooltip(String(feature.properties['Festival_N']), {
             sticky: true,
             className: 'my-tooltip'
         });
     }
+
+    // 2. Popup-Inhalt (JETZT VOLLSTÄNDIG)
     var fName = feature.properties['Festival_N'] ? feature.properties['Festival_N'].toString().trim() : 'Unbekanntes Festival';
-    var zielUrl = festivalLinks[fName]; 
+    var zielUrl = (typeof festivalLinks !== 'undefined' && festivalLinks[fName]) ? festivalLinks[fName] : "";
+    
     if (!zielUrl || zielUrl === "") {
         zielUrl = "https://www.google.com/search?q=" + encodeURIComponent(fName + " Festival Brandenburg");
     }
 
-     var popupContent = '<div style="text-align: center; font-weight: bold; font-size: 17px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">' + 
+    var popupContent = '<div style="text-align: center; font-weight: bold; font-size: 17px; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">' + 
                         '<a href="' + zielUrl + '" target="_blank" rel="noopener noreferrer" style="color: #8e44ad; text-decoration: none;">' + 
                            fName + '<span style="font-size: 18px; margin-left: 8px;">&#10150;</span>' +
                         '</a>' +
@@ -766,11 +756,35 @@ function pop_festival_2(feature, layer) {
                         <tr><th scope="row">PLZ</th><td>' + (feature.properties['PLZ'] || '') + '</td></tr>\
                         <tr><th scope="row">Ort</th><td>' + (feature.properties['Ort'] || '') + '</td></tr>\
                         <tr><th scope="row">Landkreis</th><td>' + (feature.properties['gen'] || '') + '</td></tr>\
-                    </table>';
+                       </table>';
+
+    // 3. Popup registrieren
     layer.bindPopup(popupContent, {
         minWidth: 350,
         maxWidth: 800,
         autoPan: true
+    });
+
+    // 4. Den automatischen Leaflet-Klick deaktivieren
+    layer.off('click');
+
+    // 5. Deine Logik für das Routing
+    layer.on('click', function(e) {
+        var routingContainer = document.querySelector('.leaflet-routing-container');
+        var istRoutingAktiv = routingContainer && !routingContainer.classList.contains('leaflet-routing-container-hide');
+
+        if (istRoutingAktiv) {
+            // Routing aktiv: Nur Wegpunkt setzen, KEIN Popup öffnen
+            L.DomEvent.stopPropagation(e); 
+            if (typeof control !== 'undefined') {
+                var waypoints = control.getPlan().getWaypoints();
+                control.spliceWaypoints(waypoints.length - 1, 1, e.latlng);
+            }
+            // Wir rufen hier layer.openPopup() NICHT auf!
+        } else {
+            // Routing inaktiv: Popup öffnen
+            layer.openPopup();
+        }
     });
 }
 
